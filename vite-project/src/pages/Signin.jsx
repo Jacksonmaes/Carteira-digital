@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo (1).png"
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -6,6 +6,7 @@ import { useForm } from "react-hook-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorInput from "../components/ErrorInput";
 import { signinSchema } from "../schemas/SigninSchima";
+import { Cookies } from "js-cookie";
 
 
 export default function Signin() {
@@ -15,10 +16,19 @@ export default function Signin() {
         formState: { errors },
     } = useForm({ resolver: zodResolver(signinSchema) });
 
-    function handleSubmitForm(data) {
-        console.log(data)
+    const navigate = useNavigate()
+
+    async function handleSubmitForm(data) {
         
-    }
+        try {
+           const token = await Signin(data);
+           Cookies.set("token", token.data, { expires: 1 });
+           navigate("/");
+          }catch (error) {
+            console.log(error.message);
+          }
+      }
+
     return (
         <div className="flex flex-col items-center justify-around bg-zinc-900 
         rounded p-8 w-[35rem] h-[35rem]">

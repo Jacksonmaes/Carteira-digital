@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorInput from "../components/ErrorInput";
 import { signupSchema } from "../schemas/SignupSchema";
 import { signup } from "../Services/user";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -18,11 +19,15 @@ export default function Signup() {
         formState: { errors },
     } =  useForm({ resolver: zodResolver(signupSchema) });
 
-   async function handleSubmitForm(data) {
-        console.log(data);
-        const response = await signup(data);
-        console.log(response);
+    const navigate = useNavigate()
 
+   async function handleSubmitForm(data) {
+        try {
+          await signup(data);
+          navigate("/signin");
+        }catch (error) {
+          console.log(error.message)
+        }
         
     }
     return (
