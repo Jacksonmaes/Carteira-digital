@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/logo (1).png";
+import logo from "../assets/logo.png";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { BiArrowBack} from "react-icons/bi";
@@ -9,6 +9,7 @@ import ErrorInput from "../components/ErrorInput";
 import { signupSchema } from "../schemas/SignupSchema";
 import { signup } from "../Services/user";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 
@@ -20,6 +21,7 @@ export default function Signup() {
     } =  useForm({ resolver: zodResolver(signupSchema) });
 
     const navigate = useNavigate()
+    const [apiError, setApiError] = useState("");
 
    async function handleSubmitForm(data) {
         try {
@@ -27,6 +29,7 @@ export default function Signup() {
           navigate("/signin");
         }catch (error) {
           console.log(error.message)
+          setApiError(error.message);
         }
         
     }
@@ -37,6 +40,7 @@ export default function Signup() {
          <BiArrowBack className="text-white absolute top-3 left-3 text-2xl hover:text-sky-600" />
          </Link>
          <img src={logo} alt="" className="w-44"/>
+         {apiError && <ErrorInput text={apiError} />}
 
          <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col justify-center gap-4 w-full text-2xl">^
             <Input 

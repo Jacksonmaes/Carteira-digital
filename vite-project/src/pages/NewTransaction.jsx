@@ -1,15 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BiArrowBack } from "react-icons/bi";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { transactionSchema } from "../schemas/TransactionSchema";
 import Input from "../components/Input";
 import ErrorInput from "../components/ErrorInput";
 import Button from "../components/Button";
+import { createNewTransaction } from "../Services/transactions";
+import { useState } from "react";
 
 
 export default function NewTransaction() {
     const { type } = useParams();
+    const navigate = useNavigate();
+    const [apiError, setApiError] = useState("");
 
     const {
         register,
@@ -19,8 +23,15 @@ export default function NewTransaction() {
         resolver: zodResolver(transactionSchema),
     });
 
-    function onSubmitForm(data) {
-        console.log(data);
+   async function onSubmitForm(data) {
+        try {
+            const body = { ...data, type}
+            await createNewTransaction(body);
+            navigate("/");
+        } catch( error ) {
+            setApiError(error.message);
+            console.log(data);        
+        }
     }
 
     return(
@@ -32,6 +43,7 @@ export default function NewTransaction() {
                 <h1 className="ext-white font-bold text-5xl">New {type}</h1>
 
             </header>
+            {apiError && <ErrorInput text={apiError} />}
 
             <form onSubmit={handleSubmit(onSubmitForm)}
                  className="flex flex-col justify-center gap-4 w-full text-2xl"

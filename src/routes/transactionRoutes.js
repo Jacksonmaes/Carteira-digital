@@ -1,5 +1,5 @@
 import { Router } from "express";
-import transactionController from "../controllers/transactionController.js";
+import transactionController from '../controllers/transactionController.js';
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { validationSchemaMiddleware } from "../middlewares/validationSchemaMiddleware.js";
 import { CreateTransaction } from "../schemas/validation/CreateTransaction.js";
