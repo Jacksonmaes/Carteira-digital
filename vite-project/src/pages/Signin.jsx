@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorInput from "../components/ErrorInput";
 import { signinSchema } from "../schemas/SigninSchima";
-import { Cookies } from "js-cookie";
+import  Cookies  from "js-cookie";
 import { useEffect, useState } from "react";
 
 
